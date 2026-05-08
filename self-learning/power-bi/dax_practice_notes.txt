@@ -1,0 +1,106 @@
+self learning - DAX practice notes
+======================================================================
+practicing DAX formulas - writing them here before trying in power bi
+found some good examples online and modified them for my use case
+
+----------------------------------------------------------------------
+MEASURES I WANT TO MASTER
+----------------------------------------------------------------------
+
+-- 1. CALCULATE with multiple filters
+High Value IT Sales =
+CALCULATE(
+    SUM(Orders[amount]),
+    Orders[department] = "IT",
+    Orders[amount] > 10000
+)
+
+-- 2. ALL() - removes all filters (useful for % of total)
+Revenue % of Total =
+DIVIDE(
+    [Total Revenue],
+    CALCULATE([Total Revenue], ALL(Orders))
+)
+-- the ALL() ignores any slicer or filter on the visual
+-- so denominator is always the grand total
+
+-- 3. ALLEXCEPT - remove all filters EXCEPT one column
+Revenue by Region (ignore date filter) =
+CALCULATE(
+    [Total Revenue],
+    ALLEXCEPT(DateTable, DateTable[Year])
+)
+-- keeps year filter, removes all other filters
+
+-- 4. SELECTEDVALUE - what's currently selected in a slicer
+Selected Year = SELECTEDVALUE(DateTable[Year], "All Years")
+-- if nothing selected → shows "All Years"
+-- if one year selected → shows that year
+-- if multiple selected → shows "All Years" (fallback)
+
+-- 5. SWITCH - cleaner than nested IF
+Segment Label =
+SWITCH(
+    TRUE(),
+    [Avg Order Value] >= 5000, "Premium",
+    [Avg Order Value] >= 2000, "Standard",
+    [Avg Order Value] >= 500,  "Budget",
+    "Unknown"
+)
+
+-- 6. SUMX - iterate row by row, then aggregate
+Total Revenue (manual) =
+SUMX(
+    Orders,
+    Orders[quantity] * Orders[unit_price]
+)
+-- useful when there's no pre-calculated total column
+
+-- 7. RANKX - rank items in a visual
+Product Rank =
+RANKX(
+    ALL(Products[product_name]),
+    [Total Revenue],
+    ,
+    DESC,
+    Dense
+)
+
+-- 8. VAR / RETURN - cleaner multi-step calculations
+YoY Growth % =
+VAR current_year_rev = [Total Revenue]
+VAR prev_year_rev =
+    CALCULATE([Total Revenue], SAMEPERIODLASTYEAR(DateTable[Date]))
+VAR growth =
+    DIVIDE(current_year_rev - prev_year_rev, prev_year_rev, 0)
+RETURN
+    growth
+-- VAR/RETURN makes long formulas readable, also more efficient
+
+----------------------------------------------------------------------
+THINGS I KEEP FORGETTING
+----------------------------------------------------------------------
+- measures live in the model, not in a table
+- you can create a dedicated "Measures" table: create an empty table,
+  drag all measures into it → much cleaner model
+- format strings: 
+  → #,0       for whole numbers with comma separator
+  → #,0.00    for 2 decimal places
+  → 0.0%      for percentage
+  → £#,0      for currency with symbol
+
+----------------------------------------------------------------------
+FILTER CONTEXT EXAMPLES (trying to understand this properly)
+----------------------------------------------------------------------
+
+if i have a bar chart with "Region" on the axis and "[Total Revenue]" as value:
+- each bar = different filter context
+- "North" bar → filter context sets Region = North
+- [Total Revenue] = SUM(Orders[amount]) WHERE Region = North
+
+CALCULATE changes this:
+- CALCULATE([Total Revenue], ALL(Orders[Region]))
+  → now ignores the bar's region filter, shows total for ALL regions
+  → every bar shows same value = grand total
+
+this is the key insight i was missing for the % of total pattern

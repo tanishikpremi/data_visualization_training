@@ -1,0 +1,91 @@
+self learning - excel notes and things i figured out on my own
+======================================================================
+mostly tips from youtube videos and trying things in Excel manually
+
+----------------------------------------------------------------------
+TOPIC 1: PIVOT TABLES - things i didn't know
+----------------------------------------------------------------------
+
+Default behavior:
+- dragging a text field to VALUES gives you COUNT
+- dragging a number field to VALUES gives you SUM
+- you can right-click any value and change the summarize by option
+
+Grouping dates:
+- right click a date field in rows → "Group"
+- can group by Year > Quarter > Month
+- this makes time-based analysis SO much faster
+
+Slicers:
+- Insert → Slicer → pick the field
+- way cleaner than using the filter dropdown
+- you can connect one slicer to MULTIPLE pivot tables on the same sheet
+
+Calculated Field:
+- PivotTable Analyze → Fields, Items & Sets → Calculated Field
+- creates a new formula field e.g. = Revenue - Cost
+
+----------------------------------------------------------------------
+TOPIC 2: THINGS THAT TRIPPED ME UP
+----------------------------------------------------------------------
+
+VLOOKUP pitfalls:
+❌ VLOOKUP only looks RIGHT - can't look to the left of the lookup column
+✅ Fix: use INDEX + MATCH instead
+   =INDEX(B:B, MATCH(G2, A:A, 0))  ← this can look any direction
+
+Circular references:
+- happens when a formula references its own cell
+- Excel usually warns you but it can be sneaky
+
+Volatile functions (recalculate every time):
+- NOW(), TODAY(), RAND(), OFFSET()
+- can slow down large spreadsheets significantly
+
+Text vs Number confusion:
+- numbers stored as text won't sum correctly
+- fix: Data → Text to Columns → Finish
+- or: multiply column by 1 using Paste Special
+
+----------------------------------------------------------------------
+TOPIC 3: KEYBOARD SHORTCUTS I ACTUALLY USE
+----------------------------------------------------------------------
+
+Ctrl + T         → Convert range to Table (auto-expands, better for formulas)
+Ctrl + Shift + L → Add/remove filters
+Ctrl + ;         → Insert today's date
+F4               → Repeat last action OR toggle absolute reference ($A$1)
+Alt + =          → AutoSum
+Ctrl + D         → Fill down (copy formula to selected cells below)
+Ctrl + Shift + End → Select to last used cell
+Ctrl + PageUp/Down → Switch between worksheets
+
+----------------------------------------------------------------------
+TOPIC 4: DATA VALIDATION
+----------------------------------------------------------------------
+- Data → Data Validation
+- can restrict a cell to:
+  - only whole numbers in a range
+  - a dropdown list (from a range or typed manually)
+  - dates within a range
+  - text length
+- Add an input message and error alert to guide users
+
+----------------------------------------------------------------------
+TOPIC 5: CONDITIONAL FORMATTING
+----------------------------------------------------------------------
+- Home → Conditional Formatting
+- highlight cells above/below average
+- color scales (green = high, red = low)
+- data bars (mini bar chart in cell)
+- icon sets (arrows, traffic lights)
+- create custom rule with formula e.g. =A1>AVERAGE($A$1:$A$100)
+
+----------------------------------------------------------------------
+TODO / still need to practice:
+----------------------------------------------------------------------
+[ ] Power Query - cleaning messy data automatically
+[ ] INDIRECT() function for dynamic ranges
+[ ] Array formulas (Ctrl+Shift+Enter)
+[ ] Named ranges for cleaner formulas
+[ ] Macro recording basics (not full VBA yet)

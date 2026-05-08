@@ -1,0 +1,104 @@
+self learning - power bi personal notes
+======================================================================
+started using power bi on my own after the intro class
+these are things i discovered while building a practice dashboard
+
+----------------------------------------------------------------------
+DAY 1 - connecting data and basic visuals
+----------------------------------------------------------------------
+
+imported a CSV file with sales data
+- Get Data → Text/CSV → Transform Data
+- in Power Query, renamed columns to remove spaces
+  (spaces in column names cause issues in DAX formulas later)
+- changed data types: Order Date → Date, Revenue → Decimal Number
+- removed blank rows using "Remove Rows → Remove Blank Rows"
+
+first issue i had:
+- my date column was being read as text
+- fixed it: select column → Data Type → Date
+
+created 3 visuals on first report page:
+1. card visual for Total Revenue
+2. bar chart: Revenue by Product Category
+3. line chart: Monthly Revenue trend
+
+----------------------------------------------------------------------
+DAY 2 - relationships and data model
+----------------------------------------------------------------------
+
+added a second table (customers CSV)
+- Model view shows the tables
+- dragged customer_id from Orders to Customers to create relationship
+- it auto-detected cardinality: Many (orders) to One (customers) ✓
+
+important relationship settings:
+- Cross filter direction: Single vs Both
+  → Both allows filters to flow in both directions
+  → be careful with Both on many-to-many, can cause issues
+
+built a date table manually (this is apparently a best practice):
+  DateTable = CALENDAR(DATE(2023,1,1), DATE(2025,12,31))
+  then added columns:
+  Year = YEAR([Date])
+  Month = FORMAT([Date], "MMM")
+  Quarter = "Q" & QUARTER([Date])
+  MonthNum = MONTH([Date])  ← needed for sorting month names correctly
+
+----------------------------------------------------------------------
+DAY 3 - DAX measures i created myself
+----------------------------------------------------------------------
+
+Total Revenue:
+Total Revenue = SUM(Orders[amount])
+
+Total Orders:
+Total Orders = COUNTROWS(Orders)
+
+Avg Order Value:
+Avg Order Value = DIVIDE([Total Revenue], [Total Orders], 0)
+
+Revenue Last Month:
+Revenue LM = CALCULATE([Total Revenue], PREVIOUSMONTH(DateTable[Date]))
+
+MoM Change %:
+MoM % = DIVIDE([Total Revenue] - [Revenue LM], [Revenue LM], 0)
+
+formatting tip: format the MoM measure as percentage
+→ right-click measure → Format → Percentage
+
+----------------------------------------------------------------------
+DAY 4 - things that confused me / mistakes made
+----------------------------------------------------------------------
+
+❌ Mistake: put a measure in the Axis field of a visual
+   → measures go in VALUES, not Axis/Legend
+   → dimensions (columns) go in Axis/Legend
+
+❌ Mistake: tried using a column directly instead of writing a measure
+   → columns are computed row by row, measures are aggregated
+   → always write DAX measures for KPIs, don't drag raw columns into values
+
+Context confusion:
+- row context = which row is being evaluated (in calculated columns)
+- filter context = what filters are currently active (in measures)
+- CALCULATE() is used to CHANGE the filter context
+  e.g. CALCULATE([Total Revenue], Region = "North") 
+       → ignores other region filters and forces "North"
+
+----------------------------------------------------------------------
+VISUALS THAT WORKED WELL FOR MY DASHBOARD
+----------------------------------------------------------------------
+- KPI visual: good for showing current vs target vs trend
+- Filled Map: used for city-level sales (needed lat/long or country column)
+- Decomposition Tree: great for drilling into what's driving a metric
+- Q&A visual: lets users type natural language questions
+- Bookmark buttons: created a navigation bar between report pages
+
+----------------------------------------------------------------------
+TODO next:
+----------------------------------------------------------------------
+[ ] learn row-level security (RLS) - restrict data per user
+[ ] try publishing to Power BI Service and scheduling refresh
+[ ] learn ALLEXCEPT() for partial filter removal
+[ ] explore custom visuals from AppSource
