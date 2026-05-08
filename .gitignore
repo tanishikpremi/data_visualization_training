@@ -1,0 +1,31 @@
+# ── Data files (too large / sensitive) ────────
+*.csv
+*.xlsx
+*.xls
+*.tsv
+*.parquet
+*.json
+
+# ── Exceptions: keep gitkeep files ─────────────
+!**/.gitkeep
+
+# ── Python cache ───────────────────────────────
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+
+# ── Jupyter checkpoints ────────────────────────
+.ipynb_checkpoints/
+
+# ── Virtual environments ───────────────────────
+venv/
+env/
+.env
+*.env
+
+# ── OS files ───────────────────────────────────
+.DS_Store
+Thumbs.db
+desktop.ini
