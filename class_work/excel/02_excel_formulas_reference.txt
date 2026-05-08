@@ -1,0 +1,71 @@
+# CLASS WORK | Excel - Key Functions & Formulas Reference
+# ============================================================
+# This file documents the most important Excel formulas
+# with syntax, examples, and use cases.
+
+# ─────────────────────────────────────────────
+# 1. MATH & STATISTICS
+# ─────────────────────────────────────────────
+# SUM        → =SUM(A1:A10)              → Adds all values
+# AVERAGE    → =AVERAGE(B1:B10)          → Mean of values
+# MIN / MAX  → =MIN(C1:C10)              → Smallest/Largest value
+# COUNT      → =COUNT(A1:A10)            → Count of numeric cells
+# COUNTA     → =COUNTA(A1:A10)           → Count non-empty cells
+# ROUND      → =ROUND(A1, 2)             → Round to 2 decimals
+
+# ─────────────────────────────────────────────
+# 2. LOGICAL FUNCTIONS
+# ─────────────────────────────────────────────
+# IF         → =IF(A1>50, "Pass", "Fail")
+# AND        → =IF(AND(A1>40, B1>40), "Pass", "Fail")
+# OR         → =IF(OR(A1>90, B1>90), "Distinction", "Normal")
+# IFERROR    → =IFERROR(A1/B1, "Error")  → Handle divide-by-zero
+
+# ─────────────────────────────────────────────
+# 3. LOOKUP FUNCTIONS
+# ─────────────────────────────────────────────
+# VLOOKUP    → =VLOOKUP(D2, A:B, 2, FALSE)   → Vertical lookup
+# HLOOKUP    → =HLOOKUP(D2, 1:2, 2, FALSE)   → Horizontal lookup
+# INDEX      → =INDEX(B2:B10, 3)             → Value at position
+# MATCH      → =MATCH("Alice", A2:A10, 0)    → Position of value
+# INDEX+MATCH→ =INDEX(B2:B10, MATCH(D2, A2:A10, 0))  ← Recommended over VLOOKUP
+# XLOOKUP    → =XLOOKUP(D2, A2:A10, B2:B10)  → Modern (Excel 365+)
+
+# ─────────────────────────────────────────────
+# 4. TEXT FUNCTIONS
+# ─────────────────────────────────────────────
+# LEN        → =LEN(A1)                  → Length of string
+# LEFT/RIGHT → =LEFT(A1, 3)              → First/last N characters
+# MID        → =MID(A1, 2, 4)            → Extract substring
+# TRIM       → =TRIM(A1)                 → Remove extra spaces
+# UPPER/LOWER→ =UPPER(A1)               → Change case
+# CONCATENATE→ =CONCATENATE(A1," ",B1)  → Join strings
+# TEXTJOIN   → =TEXTJOIN(", ",TRUE,A1:A5) → Join with delimiter
+
+# ─────────────────────────────────────────────
+# 5. DATE & TIME FUNCTIONS
+# ─────────────────────────────────────────────
+# TODAY      → =TODAY()                  → Current date
+# NOW        → =NOW()                    → Current date + time
+# YEAR/MONTH/DAY → =YEAR(A1)            → Extract parts
+# DATEDIF    → =DATEDIF(A1,B1,"Y")      → Age/difference in years
+# NETWORKDAYS→ =NETWORKDAYS(A1,B1)      → Working days between dates
+
+# ─────────────────────────────────────────────
+# 6. CONDITIONAL AGGREGATION
+# ─────────────────────────────────────────────
+# SUMIF      → =SUMIF(A:A,"IT",C:C)            → Sum if department = IT
+# COUNTIF    → =COUNTIF(A:A,"Alice")           → Count if name = Alice
+# SUMIFS     → =SUMIFS(C:C, A:A,"IT", B:B,">50000")  → Multi-condition sum
+# AVERAGEIF  → =AVERAGEIF(A:A,"HR",C:C)        → Avg if condition met
+
+# ─────────────────────────────────────────────
+# 7. PIVOT TABLES — QUICK STEPS
+# ─────────────────────────────────────────────
+# 1. Select your data range
+# 2. Insert → PivotTable
+# 3. Drag fields:
+#    - ROWS    : Category (e.g., Department)
+#    - COLUMNS : Optional grouping (e.g., Month)
+#    - VALUES  : What to aggregate (e.g., SUM of Sales)
+#    - FILTERS : Optional slicer (e.g., Year)

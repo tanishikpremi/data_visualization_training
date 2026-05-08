@@ -1,0 +1,90 @@
+# CLASS WORK | Power BI - Concepts & DAX Reference
+# ============================================================
+# This file covers key Power BI concepts and DAX formulas
+# for data modeling, measures, and KPI visualization.
+
+# ─────────────────────────────────────────────
+# 1. POWER BI WORKFLOW (Steps)
+# ─────────────────────────────────────────────
+# Step 1 → Get Data        : Import from Excel, CSV, SQL, API, etc.
+# Step 2 → Transform Data  : Use Power Query Editor (clean, reshape)
+# Step 3 → Data Model      : Define relationships between tables
+# Step 4 → Create Measures : Write DAX formulas for KPIs
+# Step 5 → Build Report    : Drag visuals, apply filters, slicers
+# Step 6 → Publish         : Publish to Power BI Service / Share
+
+# ─────────────────────────────────────────────
+# 2. COMMON DAX MEASURES
+# ─────────────────────────────────────────────
+
+# Total Sales
+# Total Sales = SUM(Sales[Amount])
+
+# Average Salary
+# Avg Salary = AVERAGE(Employees[Salary])
+
+# Count of Customers
+# Customer Count = COUNTROWS(Customers)
+
+# Distinct Count
+# Unique Products = DISTINCTCOUNT(Orders[ProductID])
+
+# Running Total (Year-to-Date)
+# Sales YTD = TOTALYTD(SUM(Sales[Amount]), Dates[Date])
+
+# ─────────────────────────────────────────────
+# 3. FILTER & CALCULATE
+# ─────────────────────────────────────────────
+
+# Sales for IT Dept only
+# IT Sales = CALCULATE(SUM(Sales[Amount]), Employees[Department] = "IT")
+
+# Sales where Amount > 10000
+# Big Sales = CALCULATE(SUM(Sales[Amount]), Sales[Amount] > 10000)
+
+# ─────────────────────────────────────────────
+# 4. TIME INTELLIGENCE
+# ─────────────────────────────────────────────
+
+# Sales Previous Month
+# Prev Month Sales = CALCULATE([Total Sales], PREVIOUSMONTH(Dates[Date]))
+
+# Sales Same Period Last Year
+# Sales SPLY = CALCULATE([Total Sales], SAMEPERIODLASTYEAR(Dates[Date]))
+
+# Month-over-Month Growth %
+# MoM Growth = DIVIDE([Total Sales] - [Prev Month Sales], [Prev Month Sales], 0)
+
+# ─────────────────────────────────────────────
+# 5. RANKING & TOPN
+# ─────────────────────────────────────────────
+
+# Rank employees by salary
+# Salary Rank = RANKX(ALL(Employees), [Avg Salary],, DESC, DENSE)
+
+# Top 5 Products by Revenue
+# TOPN(5, Products, [Total Sales], DESC)
+
+# ─────────────────────────────────────────────
+# 6. BEST PRACTICE VISUALS IN POWER BI
+# ─────────────────────────────────────────────
+# Bar/Column Chart  → Compare categories
+# Line Chart        → Show trends over time
+# Pie/Donut Chart   → Show proportions (use sparingly)
+# Card Visual       → Display single KPI (Total Sales, etc.)
+# Table/Matrix      → Detailed tabular view
+# Map Visual        → Geographic data
+# Scatter Plot      → Relationship between 2 numeric variables
+# Slicer            → Interactive filter on the report page
+
+# ─────────────────────────────────────────────
+# 7. POWER QUERY — COMMON TRANSFORMATIONS
+# ─────────────────────────────────────────────
+# - Remove duplicates
+# - Fill down / Fill up
+# - Split column by delimiter
+# - Change data types
+# - Merge queries (like SQL JOIN)
+# - Append queries (like SQL UNION)
+# - Add custom column with formula
+# - Unpivot columns (wide → long format)
